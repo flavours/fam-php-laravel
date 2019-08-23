@@ -1,0 +1,42 @@
+#!/usr/bin/env php
+<?php
+
+require("/fam-php/vendor/autoload.php");
+
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Exception\ParseException;
+
+const FLAVOUR_FILE = 'app.flavour';
+
+function remove()
+{
+    $stdin = stream_get_contents(STDIN);
+    call_parent($stdin);
+}
+
+function call_parent($stdin)
+{
+    $descriptorspec = array(
+        0 => ["pipe", "r"],
+        1 => ["pipe", "w"],
+        2 => ["pipe", "w"]
+    );
+
+    $process = proc_open('/fam-php/bin/remove', $descriptorspec, $pipes);
+
+    if (is_resource($process)) {
+        fwrite($pipes[0], $stdin);
+        fclose($pipes[0]);
+        $result = stream_get_contents($pipes[1]);
+        fclose($pipes[1]);
+        fclose($pipes[2]);
+        $return = proc_close($process);
+    }
+
+    if ($return > 0) {
+        echo $result;
+        exit($return);
+    }
+}
+
+remove();
