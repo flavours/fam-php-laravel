@@ -1,4 +1,4 @@
-FROM flavour/fam-php:0.1
+FROM flavour/fam-php:0.1.1
 
 WORKDIR /app
 
