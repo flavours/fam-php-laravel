@@ -4,7 +4,7 @@ WORKDIR /app
 
 FROM robwi/divio-php
 
-ENV FAM_IDENTIFIER flavour/fam-php-laravel:0.1
+ENV FAM_IDENTIFIER flavour/fam-php-laravel:0.1.1
 
 ENV PATH="/fam-php-laravel/bin:${PATH}"
 
