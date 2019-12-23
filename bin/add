@@ -6,20 +6,18 @@ require("/fam-php-laravel/vendor/autoload.php");
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
 
-const FLAVOUR_FILE = 'app.flavour';
-
 function add()
 {
     $stdin = stream_get_contents(STDIN);
-    call_parent($stdin);
+    return call_parent($stdin);
 }
 
-function call_parent($stdin)
+function call_parent($stdin) : int
 {
     $descriptorspec = array(
         0 => ["pipe", "r"],
         1 => ["pipe", "w"],
-        2 => ["file", "/tmp/error-output.txt", "a"]
+        2 => ["pipe", "w"]
     );
 
     $process = proc_open('/fam-php/bin/add', $descriptorspec, $pipes);
@@ -27,10 +25,18 @@ function call_parent($stdin)
     if (is_resource($process)) {
         fwrite($pipes[0], $stdin);
         fclose($pipes[0]);
-        // $return = stream_get_contents($pipes[1]);
+        $result = stream_get_contents($pipes[1]);
         fclose($pipes[1]);
-        proc_close($process);
+        fclose($pipes[2]);
+        $return = proc_close($process);
     }
+
+    if ($return > 0) {
+        echo $result;
+        return $return;
+    }
+
+    return 0;
 }
 
-add();
+exit(add());

@@ -1,10 +1,10 @@
-FROM flavour/fam-php:0.1.1
+FROM flavour/fam-php:0.2.0
 
 WORKDIR /app
 
-FROM robwi/divio-php
+FROM divio/base:0.1-php7.3-stretch
 
-ENV FAM_IDENTIFIER flavour/fam-php-laravel:0.1.1
+ENV FAM_IDENTIFIER flavour/fam-php-laravel:0.2.0
 
 ENV PATH="/fam-php-laravel/bin:${PATH}"
 

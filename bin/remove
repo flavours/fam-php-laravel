@@ -1,20 +1,18 @@
 #!/usr/bin/env php
 <?php
 
-require("/fam-php/vendor/autoload.php");
+require("/fam-php-laravel/vendor/autoload.php");
 
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
 
-const FLAVOUR_FILE = 'app.flavour';
-
 function remove()
 {
     $stdin = stream_get_contents(STDIN);
-    call_parent($stdin);
+    return call_parent($stdin);
 }
 
-function call_parent($stdin)
+function call_parent($stdin) : int
 {
     $descriptorspec = array(
         0 => ["pipe", "r"],
@@ -35,8 +33,10 @@ function call_parent($stdin)
 
     if ($return > 0) {
         echo $result;
-        exit($return);
+        return $return;
     }
+
+    return 0;
 }
 
-remove();
+exit(remove());
